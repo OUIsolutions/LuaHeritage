@@ -1,0 +1,53 @@
+---@meta LuaHeritage
+
+--- Callback signature used for methods set via set_*_method / *_method_extends.
+--- Receives the public table, the private table, and any extra call-time arguments.
+---@alias MethodCallback fun(public: table, private: table, ...): any
+
+--- Initial configuration accepted by `newMetaObject`.
+---@class MetaObjectProps
+---@field public public?     table  Initial public fields.
+---@field private private?    table  Initial private fields.
+---@field meta_table? table  Initial metamethods / metatable entries.
+
+--- Object returned by `herigitage.newMetaObject`.
+---@class MetaObject
+---@field public public     table  Publicly accessible fields and methods.
+---@field private private    table  Privately accessible fields and methods.
+---@field meta_table table  Metatable entries applied to `public`.
+---
+--- Sets a metamethod on `meta_table` and re-applies the metatable to `public`.
+---@field set_meta_method   fun(method_name: string, callback: MethodCallback)
+---
+--- Adds a method directly onto `public`.
+---@field set_public_method  fun(method_name: string, callback: MethodCallback)
+---
+--- Adds a method directly onto `private`.
+---@field set_private_method fun(method_name: string, callback: MethodCallback)
+---
+--- Copies all key/value pairs from `props` into `public` (no wrapping).
+---@field public_props_extends  fun(props: table)
+---
+--- Copies all key/value pairs from `props` into `private` (no wrapping).
+---@field private_props_extends fun(props: table)
+---
+--- Copies all key/value pairs from `props` into `meta_table` (no wrapping).
+---@field meta_props_extends    fun(props: table)
+---
+--- Wraps every value in `props` as a method and adds it to `public`.
+---@field public_method_extends  fun(props: table<string, MethodCallback>)
+---
+--- Wraps every value in `props` as a method and adds it to `private`.
+---@field private_method_extends fun(props: table<string, MethodCallback>)
+---
+--- Wraps every value in `props` as a metamethod and re-applies the metatable.
+---@field meta_method_extends    fun(props: table<string, MethodCallback>)
+
+--- The `herigitage` module returned by `heregitage.lua`.
+---@class Herigitage
+---@field pairs         fun(t: table): fun(t: table, k: any): any, any  Standard `pairs`.
+---@field setmetatable  fun(table: table, metatable: table): table       Standard `setmetatable`.
+---@field type          fun(v: any): string                              Standard `type`.
+---
+--- Creates and returns a new MetaObject.
+---@field newMetaObject fun(props?: MetaObjectProps): MetaObject
